@@ -1,80 +1,21 @@
-```html
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>AI Resume Builder</title>
-  <link rel="stylesheet" href="/static/style.css">
+    <title>AI Resume Builder</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
-  <div class="container">
-    <h1>AI Resume Builder</h1>
-    <form id="resumeForm">
-      <input type="text" name="name" placeholder="Full Name" required>
-      <input type="text" name="summary" placeholder="Personal Summary" required>
-      <input type="text" name="email" placeholder="Email">
-      <input type="text" name="phone" placeholder="Phone">
-      <input type="text" name="address" placeholder="Address">
-      <textarea name="education" placeholder="Education"></textarea>
-      <textarea name="experience" placeholder="Experience"></textarea>
-      <textarea name="skills" placeholder="Skills"></textarea>
-      <textarea name="references" placeholder="References"></textarea>
-
-      <label>Select Template:</label>
-      <select name="template">
-        <option value="1">Classic</option>
-        <option value="2">Modern</option>
-        <option value="3">Creative</option>
-      </select>
-
-      <button type="submit">Generate Resume</button>
-    </form>
-
-    <pre id="output"></pre>
-
-    <button onclick="download('pdf')">Download PDF</button>
-    <button onclick="download('word')">Download Word</button>
-  </div>
-
-<script>
-  const form = document.getElementById("resumeForm")
-  const output = document.getElementById("output")
-  let resumeContent = ""
-
-  form.onsubmit = async function(e) {
-    e.preventDefault()
-    const formData = new FormData(form)
-    const jsonData = {}
-    formData.forEach((v, k) => jsonData[k] = v)
-
-    const res = await fetch("/generate", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(jsonData)
-    })
-    const data = await res.json()
-    resumeContent = data.output
-    output.textContent = resumeContent
-  }
-
-  async function download(fileType) {
-    const res = await fetch("/download", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ content: resumeContent, fileType })
-    })
-    const blob = await res.blob()
-    const url = window.URL.createObjectURL(blob)
-    const a = document.createElement("a")
-    a.href = url
-    a.download = fileType === "pdf" ? "resume.pdf" : "resume.docx"
-    a.click()
-    URL.revokeObjectURL(url)
-  }
-</script>
+    <div class="container">
+        <h1>AI Resume Builder</h1>
+        <form id="resume-form">
+            <input type="text" name="job_title" placeholder="Job Title" required>
+            <textarea name="experience" placeholder="Experience" required></textarea>
+            <textarea name="skills" placeholder="Skills" required></textarea>
+            <button type="submit">Generate Resume</button>
+        </form>
+        <div id="output"></div>
+    </div>
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
 </body>
 </html>
-```
 
----
