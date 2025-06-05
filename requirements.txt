@@ -1,7 +1,3 @@
-```txt
 Flask
-python-docx
-fpdf
-```
-
----
+requests
+python-dotenv
