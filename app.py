@@ -1,108 +1,83 @@
-from flask import Flask, render_template, request, jsonify, send_file
-import requests
-import os
+```python
+from flask import Flask, request, render_template, jsonify, send_file
 from docx import Document
 from fpdf import FPDF
+import os
+from io import BytesIO
 
 app = Flask(__name__)
-generated_resume = ""
 
 @app.route("/")
 def index():
     return render_template("index.html")
 
 @app.route("/generate", methods=["POST"])
-def generate_resume():
-    global generated_resume
-    data = request.json
+def generate():
+    data = request.get_json()
 
-    prompt = f"""
-    Create a {data['template']} style resume:
-    Name: {data['name']}
-    Address: {data['address']}
-    Phone: {data['phone']}
-    Email: {data['email']}
-    Summary: {data['summary']}
-    Education: {data['education']}
-    Work Experience: {data['experience']}
-    Skills: {data['skills']}
-    References: {data['references']}
-    """
+    name = data.get("name")
+    summary = data.get("summary")
+    address = data.get("address")
+    phone = data.get("phone")
+    email = data.get("email")
+    education = data.get("education")
+    experience = data.get("experience")
+    skills = data.get("skills")
+    references = data.get("references")
+    template = data.get("template", "1")
 
-    response = requests.post(
-        "https://openrouter.ai/api/v1/chat/completions",
-        headers={
-            "Authorization": f"Bearer {os.environ.get('OPENROUTER_API_KEY')}",
-            "Content-Type": "application/json"
-        },
-        json={
-            "model": "openai/gpt-3.5-turbo",
-            "messages": [{"role": "user", "content": prompt}]
-        }
-    )
+    content = f"""
+{name}
+{summary}
 
-    generated_resume = response.json()["choices"][0]["message"]["content"]
-    return jsonify({"output": generated_resume})
+Contact: {email} | {phone} | {address}
 
-@app.route("/download/pdf")
-def download_pdf():
-    pdf = FPDF()
-    pdf.add_page()
-    pdf.set_auto_page_break(auto=True)
-    pdf.set_font("Arial", size=12)
-    for line in generated_resume.split('\n'):
-        pdf.multi_cell(0, 10, line)
-    pdf.output("resume.pdf")
-    return send_file("resume.pdf", as_attachment=True)
+Education:
+{education}
 
-@app.route("/download/docx")
-def download_docx():
-    doc = Document()
-    for line in generated_resume.split('\n'):
-        doc.add_paragraph(line)
-    doc.save("resume.docx")
-    return send_file("resume.docx", as_attachment=True)
-    from flask import make_response
-from docx import Document
-from fpdf import FPDF
+Experience:
+{experience}
 
-@app.route('/download-pdf', methods=['POST'])
-def download_pdf():
-    data = request.json
-    pdf = FPDF()
-    pdf.add_page()
-    pdf.set_font("Arial", size=12)
+Skills:
+{skills}
 
-    pdf.cell(200, 10, txt="Resume", ln=True, align='C')
-    pdf.ln(10)
-    for key, value in data.items():
-        pdf.multi_cell(0, 10, f"{key.capitalize()}: {value}")
-        pdf.ln(1)
+References:
+{references}
+"""
 
-    response = make_response(pdf.output(dest='S').encode('latin1'))
-    response.headers.set('Content-Disposition', 'attachment', filename='resume.pdf')
-    response.headers.set('Content-Type', 'application/pdf')
-    return response
+    return jsonify({"output": content})
 
-@app.route('/download-docx', methods=['POST'])
-def download_docx():
-    data = request.json
-    doc = Document()
-    doc.add_heading('Resume', 0)
+@app.route("/download", methods=["POST"])
+def download():
+    data = request.get_json()
+    content = data.get("content")
+    file_type = data.get("fileType")
 
-    for key, value in data.items():
-        doc.add_heading(key.capitalize(), level=1)
-        doc.add_paragraph(value)
+    if file_type == "pdf":
+        pdf = FPDF()
+        pdf.add_page()
+        pdf.set_auto_page_break(auto=True, margin=15)
+        pdf.set_font("Arial", size=12)
+        for line in content.splitlines():
+            pdf.multi_cell(0, 10, line)
+        buffer = BytesIO()
+        pdf.output(buffer)
+        buffer.seek(0)
+        return send_file(buffer, download_name="resume.pdf", as_attachment=True)
 
-    response = make_response()
-    doc.save("resume.docx")
-    with open("resume.docx", "rb") as f:
-        response.data = f.read()
+    elif file_type == "word":
+        doc = Document()
+        for line in content.splitlines():
+            doc.add_paragraph(line)
+        buffer = BytesIO()
+        doc.save(buffer)
+        buffer.seek(0)
+        return send_file(buffer, download_name="resume.docx", as_attachment=True)
 
-    response.headers.set('Content-Disposition', 'attachment', filename='resume.docx')
-    response.headers.set('Content-Type', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document')
-    return response
-
+    return jsonify({"error": "Invalid file type"}), 400
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=81)
+    app.run(debug=True)
+```
+
+---
