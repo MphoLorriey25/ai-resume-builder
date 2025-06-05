@@ -1,83 +1,49 @@
-```python
-from flask import Flask, request, render_template, jsonify, send_file
-from docx import Document
-from fpdf import FPDF
+from flask import Flask, render_template, request, jsonify
+import requests
 import os
-from io import BytesIO
+from dotenv import load_dotenv
+
+load_dotenv()
 
 app = Flask(__name__)
 
-@app.route("/")
-def index():
-    return render_template("index.html")
+OPENROUTER_API_KEY = os.getenv("OPENROUTER_API_KEY")
 
-@app.route("/generate", methods=["POST"])
-def generate():
+@app.route('/')
+def home():
+    return render_template('index.html')
+
+@app.route('/generate', methods=['POST'])
+def generate_resume():
     data = request.get_json()
+    job_title = data.get('job_title')
+    experience = data.get('experience')
+    skills = data.get('skills')
 
-    name = data.get("name")
-    summary = data.get("summary")
-    address = data.get("address")
-    phone = data.get("phone")
-    email = data.get("email")
-    education = data.get("education")
-    experience = data.get("experience")
-    skills = data.get("skills")
-    references = data.get("references")
-    template = data.get("template", "1")
+    if not OPENROUTER_API_KEY:
+        return jsonify({"error": "Missing API key"}), 400
 
-    content = f"""
-{name}
-{summary}
+    prompt = f"Generate an ATS-friendly professional resume for the job title: {job_title}, with experience: {experience}, and skills: {skills}."
 
-Contact: {email} | {phone} | {address}
+    headers = {
+        "Authorization": f"Bearer {OPENROUTER_API_KEY}",
+        "Content-Type": "application/json"
+    }
 
-Education:
-{education}
+    payload = {
+        "model": "openai/gpt-3.5-turbo",
+        "messages": [{"role": "user", "content": prompt}]
+    }
 
-Experience:
-{experience}
+    try:
+        response = requests.post("https://openrouter.ai/api/v1/chat/completions", headers=headers, json=payload)
+        response.raise_for_status()
+        result = response.json()
+        resume = result["choices"][0]["message"]["content"]
+        return jsonify({"resume": resume})
+    except Exception as e:
+        print("Error:", e)
+        return jsonify({"error": "Failed to generate resume"}), 500
 
-Skills:
-{skills}
-
-References:
-{references}
-"""
-
-    return jsonify({"output": content})
-
-@app.route("/download", methods=["POST"])
-def download():
-    data = request.get_json()
-    content = data.get("content")
-    file_type = data.get("fileType")
-
-    if file_type == "pdf":
-        pdf = FPDF()
-        pdf.add_page()
-        pdf.set_auto_page_break(auto=True, margin=15)
-        pdf.set_font("Arial", size=12)
-        for line in content.splitlines():
-            pdf.multi_cell(0, 10, line)
-        buffer = BytesIO()
-        pdf.output(buffer)
-        buffer.seek(0)
-        return send_file(buffer, download_name="resume.pdf", as_attachment=True)
-
-    elif file_type == "word":
-        doc = Document()
-        for line in content.splitlines():
-            doc.add_paragraph(line)
-        buffer = BytesIO()
-        doc.save(buffer)
-        buffer.seek(0)
-        return send_file(buffer, download_name="resume.docx", as_attachment=True)
-
-    return jsonify({"error": "Invalid file type"}), 400
-
-if __name__ == "__main__":
+if __name__ == '__main__':
     app.run(debug=True)
-```
-
----
