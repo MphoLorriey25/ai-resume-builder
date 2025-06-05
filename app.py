@@ -1,66 +1,59 @@
-from flask import Flask, render_template, request, jsonify
-import openai
+from flask import Flask, request, jsonify
+import requests
 import os
 from dotenv import load_dotenv
 
 load_dotenv()
-openai.api_key = os.getenv("OPENAI_API_KEY")
 
 app = Flask(__name__)
 
-@app.route('/')
-def index():
-    return render_template('index.html')
+OPENROUTER_API_KEY = os.getenv("OPENROUTER_API_KEY")
 
-@app.route('/generate', methods=['POST'])
+@app.route("/generate", methods=["POST"])
 def generate_resume():
+    data = request.json
+
+    # Build the prompt with user input
+    prompt = f"""
+    Create a professional, ATS-friendly resume with this info:
+    Name: {data.get('name', '')}
+    Personal Summary: {data.get('summary', '')}
+    Address: {data.get('address', '')}
+    Phone: {data.get('phone', '')}
+    Email: {data.get('email', '')}
+    Education: {data.get('education', '')}
+    Work Experience: {data.get('experience', '')}
+    Skills: {data.get('skills', '')}
+    Job Description for keyword optimization: {data.get('job_description', '')}
+    """
+
     try:
-        data = request.get_json()
-        name = data.get('name')
-        job_title = data.get('job_title')
-        experience = data.get('experience')
-        skills = data.get('skills')
-        education = data.get('education')
-
-        prompt = f"Create a professional resume for {name}, applying for a {job_title} position. Experience: {experience}. Skills: {skills}. Education: {education}."
-
-        response = openai.ChatCompletion.create(
-            model="gpt-3.5-turbo",
-            messages=[{"role": "user", "content": prompt}],
-            max_tokens=800
+        response = requests.post(
+            "https://openrouter.ai/api/v1/chat/completions",
+            headers={
+                "Authorization": f"Bearer {OPENROUTER_API_KEY}",
+                "Content-Type": "application/json"
+            },
+            json={
+                "model": "openai/gpt-3.5-turbo",
+                "messages": [{"role": "user", "content": prompt}],
+                "temperature": 0.7
+            }
         )
+        response.raise_for_status()  # Raise HTTPError for bad responses
+        res_json = response.json()
 
-        generated_text = response['choices'][0]['message']['content']
-        return jsonify({"resume": generated_text})
+        # Extract AI-generated text
+        result = res_json["choices"][0]["message"]["content"]
 
+        return jsonify({"output": result})
+
+    except requests.exceptions.HTTPError as http_err:
+        return jsonify({"error": f"HTTP error: {http_err}"}), 500
+    except ValueError:  # includes JSONDecodeError
+        return jsonify({"error": "Invalid response from OpenRouter API"}), 500
     except Exception as e:
-        print("Error:", e)
         return jsonify({"error": str(e)}), 500
-        
-        print(data)
 
-
-    prompt = f"Generate an ATS-friendly professional resume for the job title: {job_title}, with experience: {experience}, and skills: {skills}."
-
-    headers = {
-        "Authorization": f"Bearer {OPENROUTER_API_KEY}",
-        "Content-Type": "application/json"
-    }
-
-    payload = {
-        "model": "openai/gpt-3.5-turbo",
-        "messages": [{"role": "user", "content": prompt}]
-    }
-
-    try:
-        response = requests.post("https://openrouter.ai/api/v1/chat/completions", headers=headers, json=payload)
-        response.raise_for_status()
-        result = response.json()
-        resume = result["choices"][0]["message"]["content"]
-        return jsonify({"resume": resume})
-    except Exception as e:
-        print("Error:", e)
-        return jsonify({"error": "Failed to generate resume"}), 500
-
-if __name__ == '__main__':
+if __name__ == "__main__":
     app.run(debug=True)
