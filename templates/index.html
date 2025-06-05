@@ -1,21 +1,132 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>AI Resume Builder</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>AI Resume Builder</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 700px;
+      margin: 2rem auto;
+      padding: 0 1rem;
+      background: #f9f9f9;
+      color: #333;
+    }
+    label {
+      display: block;
+      margin-top: 1rem;
+      font-weight: bold;
+    }
+    input, textarea, select, button {
+      width: 100%;
+      padding: 0.5rem;
+      margin-top: 0.3rem;
+      box-sizing: border-box;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      font-size: 1rem;
+    }
+    button {
+      margin-top: 1.5rem;
+      background-color: #007bff;
+      color: white;
+      border: none;
+      cursor: pointer;
+      font-weight: bold;
+    }
+    button:hover {
+      background-color: #0056b3;
+    }
+    #output {
+      white-space: pre-wrap;
+      margin-top: 2rem;
+      background: white;
+      padding: 1rem;
+      border-radius: 5px;
+      border: 1px solid #ddd;
+      min-height: 150px;
+    }
+  </style>
 </head>
 <body>
-    <div class="container">
-        <h1>AI Resume Builder</h1>
-        <form id="resume-form">
-            <input type="text" name="job_title" placeholder="Job Title" required>
-            <textarea name="experience" placeholder="Experience" required></textarea>
-            <textarea name="skills" placeholder="Skills" required></textarea>
-            <button type="submit">Generate Resume</button>
-        </form>
-        <div id="output"></div>
-    </div>
-    <script src="{{ url_for('static', filename='script.js') }}"></script>
+
+  <h1>AI Resume Builder</h1>
+
+  <form id="resumeForm">
+    <label for="name">Full Name</label>
+    <input type="text" id="name" required />
+
+    <label for="summary">Personal Summary</label>
+    <textarea id="summary" rows="3"></textarea>
+
+    <label for="address">Address</label>
+    <input type="text" id="address" />
+
+    <label for="phone">Phone Number</label>
+    <input type="text" id="phone" />
+
+    <label for="email">Email</label>
+    <input type="email" id="email" />
+
+    <label for="education">Education</label>
+    <textarea id="education" rows="4"></textarea>
+
+    <label for="experience">Work Experience</label>
+    <textarea id="experience" rows="4"></textarea>
+
+    <label for="skills">Skills</label>
+    <textarea id="skills" rows="3"></textarea>
+
+    <label for="jobDescription">Job Description (for keyword optimization)</label>
+    <textarea id="jobDescription" rows="4"></textarea>
+
+    <button type="submit">Generate Resume</button>
+  </form>
+
+  <div id="output" aria-live="polite"></div>
+
+  <script>
+    const form = document.getElementById("resumeForm");
+    const outputDiv = document.getElementById("output");
+
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      outputDiv.textContent = "Generating resume... please wait.";
+
+      const data = {
+        name: document.getElementById("name").value,
+        summary: document.getElementById("summary").value,
+        address: document.getElementById("address").value,
+        phone: document.getElementById("phone").value,
+        email: document.getElementById("email").value,
+        education: document.getElementById("education").value,
+        experience: document.getElementById("experience").value,
+        skills: document.getElementById("skills").value,
+        job_description: document.getElementById("jobDescription").value
+      };
+
+      try {
+        const response = await fetch("/generate", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify(data)
+        });
+
+        if (!response.ok) {
+          const errorData = await response.json();
+          outputDiv.textContent = `Error: ${errorData.error || response.statusText}`;
+          return;
+        }
+
+        const result = await response.json();
+        outputDiv.textContent = result.output;
+      } catch (err) {
+        outputDiv.textContent = `Error: ${err.message}`;
+      }
+    });
+  </script>
 </body>
 </html>
-
