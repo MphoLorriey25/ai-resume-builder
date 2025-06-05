@@ -1,27 +1,44 @@
 from flask import Flask, render_template, request, jsonify
-import requests
+import openai
 import os
 from dotenv import load_dotenv
 
 load_dotenv()
+openai.api_key = os.getenv("OPENAI_API_KEY")
 
 app = Flask(__name__)
 
-OPENROUTER_API_KEY = os.getenv("OPENROUTER_API_KEY")
-
 @app.route('/')
-def home():
+def index():
     return render_template('index.html')
 
 @app.route('/generate', methods=['POST'])
 def generate_resume():
-    data = request.get_json()
-    job_title = data.get('job_title')
-    experience = data.get('experience')
-    skills = data.get('skills')
+    try:
+        data = request.get_json()
+        name = data.get('name')
+        job_title = data.get('job_title')
+        experience = data.get('experience')
+        skills = data.get('skills')
+        education = data.get('education')
 
-    if not OPENROUTER_API_KEY:
-        return jsonify({"error": "Missing API key"}), 400
+        prompt = f"Create a professional resume for {name}, applying for a {job_title} position. Experience: {experience}. Skills: {skills}. Education: {education}."
+
+        response = openai.ChatCompletion.create(
+            model="gpt-3.5-turbo",
+            messages=[{"role": "user", "content": prompt}],
+            max_tokens=800
+        )
+
+        generated_text = response['choices'][0]['message']['content']
+        return jsonify({"resume": generated_text})
+
+    except Exception as e:
+        print("Error:", e)
+        return jsonify({"error": str(e)}), 500
+        
+        print(data)
+
 
     prompt = f"Generate an ATS-friendly professional resume for the job title: {job_title}, with experience: {experience}, and skills: {skills}."
 
