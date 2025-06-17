@@ -45,12 +45,13 @@ resumeForm.addEventListener("submit", async function (e) {
   `;
 
   try {
-    // Call AI API via your config.js function
+    // Call AI API via config.js function
     const aiResume = await generateResumeFromAPI(prompt);
 
     // Show resume content with selected template class
     resumeOutput.className = `template-${template}`;
-    resumeOutput.innerHTML = `<h2>${fullName}</h2>
+    resumeOutput.innerHTML = `
+      <h2>${fullName}</h2>
       <p><strong>Email:</strong> ${email}</p>
       <p><strong>Phone:</strong> ${phone}</p>
       <p><strong>Career Goal:</strong> ${jobTitle}</p>
@@ -61,10 +62,9 @@ resumeForm.addEventListener("submit", async function (e) {
       <pre>${aiResume}</pre>
     `;
 
-    // Show PDF download button
     downloadBtn.style.display = "inline-block";
 
-    // Save to localStorage
+    // Save resume to localStorage
     saveResume({
       name: fullName,
       email: email,
@@ -78,9 +78,16 @@ resumeForm.addEventListener("submit", async function (e) {
   }
 });
 
-// PDF Download button handler
+// Download PDF using html2pdf
 downloadBtn.addEventListener("click", function () {
-  html2pdf().from(resumeOutput).save("My_Resume.pdf");
+  const opt = {
+    margin: 0.5,
+    filename: 'My_Resume.pdf',
+    image: { type: 'jpeg', quality: 0.98 },
+    html2canvas: { scale: 2 },
+    jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' }
+  };
+  html2pdf().set(opt).from(resumeOutput).save();
 });
 
 // Save resume to localStorage
@@ -91,7 +98,7 @@ function saveResume(resume) {
   loadSavedResumes();
 }
 
-// Load saved resumes and show in dashboard
+// Load saved resumes to display
 function loadSavedResumes() {
   const saved = JSON.parse(localStorage.getItem("savedResumes") || "[]");
   const list = document.getElementById("savedResumesList");
@@ -110,7 +117,7 @@ function loadSavedResumes() {
   });
 }
 
-// View saved resume in output
+// View saved resume
 function viewResume(index) {
   const saved = JSON.parse(localStorage.getItem("savedResumes") || "[]");
   const resume = saved[index];
@@ -125,7 +132,7 @@ function viewResume(index) {
   downloadBtn.style.display = "inline-block";
 }
 
-// Delete resume from localStorage
+// Delete saved resume
 function deleteResume(index) {
   let saved = JSON.parse(localStorage.getItem("savedResumes") || "[]");
   saved.splice(index, 1);
@@ -133,8 +140,9 @@ function deleteResume(index) {
   loadSavedResumes();
 }
 
-// Dummy function for API call - replace with your real call in config.js
+// Dummy API call - replace this with real OpenRouter/ChatGPT call
 async function generateResumeFromAPI(prompt) {
-  // Example placeholder - replace with your OpenRouter API call here
+  // Replace with real fetch call if needed
   return `AI-generated resume content based on:\n${prompt}`;
 }
+
