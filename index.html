@@ -1,60 +1,35 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta charset="UTF-8">
   <title>AI Resume Builder</title>
-  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="style.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 </head>
 <body>
+  <div class="container">
+    <h1>AI Resume Builder</h1>
 
-  <form id="resumeForm">
-    <h2>📝 Resume Builder</h2>
-
-    <label>Full Name:</label>
-    <input type="text" id="fullName" required />
-
-    <label>Email Address:</label>
-    <input type="email" id="email" required />
-
-    <label>Phone Number:</label>
-    <input type="text" id="phone" required />
-
-    <label>Career Goal / Job Title:</label>
-    <input type="text" id="jobTitle" required />
-
-    <label>Educational Background:</label>
-    <textarea id="education" rows="2"></textarea>
-
-    <label>Qualifications & Skills:</label>
-    <textarea id="qualifications" rows="3"></textarea>
-
-    <label>Work Experience:</label>
-    <textarea id="experience" rows="3"></textarea>
-
-    <label>Select Resume Template:</label>
-    <select id="template">
-      <option value="classic">Classic</option>
-      <option value="modern">Modern</option>
-      <option value="creative">Creative</option>
-    </select>
-
-    <div id="templatePreview">
-      <img id="previewImage" src="templates/classic.png" alt="Template Preview" width="100%">
+    <!-- Resume Content -->
+    <div id="resume-content">
+      <h2>Jane Doe</h2>
+      <p>Email: jane.doe@example.com</p>
+      <p>Phone: +1234567890</p>
+      <h3>Experience</h3>
+      <ul>
+        <li>Software Engineer at XYZ Corp (2020 - Present)</li>
+        <li>Junior Developer at ABC Ltd (2018 - 2020)</li>
+      </ul>
+      <h3>Education</h3>
+      <ul>
+        <li>BSc in Computer Science, University of Tech (2014 - 2018)</li>
+      </ul>
     </div>
 
-    <button type="submit">Generate Resume</button>
-  </form>
+    <!-- Buttons -->
+    <button id="downloadBtn">Download as PDF</button>
+  </div>
 
-  <div id="resumeOutput" class="template-classic"></div>
-  <button id="downloadPDF" style="display:none;">📄 Download as PDF</button>
-
-  <h3>📚 Saved Resumes</h3>
-  <div id="savedResumesList"></div>
-
-  <!-- JavaScript Files -->
-  <script src="config.js"></script>
   <script src="script.js"></script>
-  <script src="https://raw.githack.com/eKoopmans/html2pdf/master/dist/html2pdf.bundle.js"></script>
 </body>
 </html>
