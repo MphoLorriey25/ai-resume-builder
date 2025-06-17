@@ -1,10 +1,11 @@
 const resumeForm = document.getElementById("resumeForm");
-const resumeOutput = document.getElementById("resumeOutput");
-const downloadBtn = document.getElementById("downloadPDF");
+const resumePreview = document.getElementById("resumePreview");
+const downloadBtn = document.getElementById("downloadBtn");
 
 resumeForm.addEventListener("submit", function (e) {
   e.preventDefault();
 
+  // Get form data
   const fullName = document.getElementById("fullName").value.trim();
   const email = document.getElementById("email").value.trim();
   const phone = document.getElementById("phone").value.trim();
@@ -13,38 +14,38 @@ resumeForm.addEventListener("submit", function (e) {
   const qualifications = document.getElementById("qualifications").value.trim();
   const experience = document.getElementById("experience").value.trim();
 
-  // Build the resume HTML
-  resumeOutput.innerHTML = `
-    <h2>${fullName}</h2>
+  // Generate resume HTML
+  const resumeHTML = `
+    <h1 style="color:#0077b6; margin-bottom:0;">${fullName}</h1>
     <p><strong>Email:</strong> ${email}</p>
     <p><strong>Phone:</strong> ${phone}</p>
-    <p><strong>Career Goal:</strong> ${jobTitle}</p>
+    <h2 style="color:#023e8a; margin-top:30px;">${jobTitle}</h2>
 
-    <h3>Education</h3>
+    <h3 style="color:#0077b6; margin-top:30px;">Education</h3>
     <p>${education.replace(/\n/g, "<br>")}</p>
 
-    <h3>Qualifications & Skills</h3>
+    <h3 style="color:#0077b6; margin-top:30px;">Qualifications & Skills</h3>
     <p>${qualifications.replace(/\n/g, "<br>")}</p>
 
-    <h3>Work Experience</h3>
+    <h3 style="color:#0077b6; margin-top:30px;">Work Experience</h3>
     <p>${experience.replace(/\n/g, "<br>")}</p>
   `;
 
-  downloadBtn.style.display = "inline-block";
+  // Show in preview container
+  resumePreview.innerHTML = resumeHTML;
+
+  // Show download button
+  downloadBtn.style.display = "block";
 });
 
-downloadBtn.addEventListener("click", function () {
-  // Clone to avoid any style issues
-  const element = resumeOutput.cloneNode(true);
-  element.style.display = "block";
-
+// Download PDF button handler
+downloadBtn.addEventListener("click", () => {
   const opt = {
-    margin: 0.5,
-    filename: "My_Resume.pdf",
-    image: { type: "jpeg", quality: 0.98 },
-    html2canvas: { scale: 2, logging: false, dpi: 192, letterRendering: true },
-    jsPDF: { unit: "in", format: "letter", orientation: "portrait" },
+    margin:       0.4,
+    filename:     'Resume.pdf',
+    image:        { type: 'jpeg', quality: 0.98 },
+    html2canvas:  { scale: 2, scrollY: 0 },
+    jsPDF:        { unit: 'in', format: 'letter', orientation: 'portrait' }
   };
-
-  html2pdf().set(opt).from(element).save();
+  html2pdf().set(opt).from(resumePreview).save();
 });
