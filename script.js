@@ -2,10 +2,9 @@ const resumeForm = document.getElementById("resumeForm");
 const resumePreview = document.getElementById("resumePreview");
 const downloadBtn = document.getElementById("downloadBtn");
 
-resumeForm.addEventListener("submit", function (e) {
+resumeForm.addEventListener("submit", async function (e) {
   e.preventDefault();
 
-  // Get form data
   const fullName = document.getElementById("fullName").value.trim();
   const email = document.getElementById("email").value.trim();
   const phone = document.getElementById("phone").value.trim();
@@ -13,39 +12,41 @@ resumeForm.addEventListener("submit", function (e) {
   const education = document.getElementById("education").value.trim();
   const qualifications = document.getElementById("qualifications").value.trim();
   const experience = document.getElementById("experience").value.trim();
+  const template = document.getElementById("template").value;
 
-  // Generate resume HTML
-  const resumeHTML = `
-    <h1 style="color:#0077b6; margin-bottom:0;">${fullName}</h1>
-    <p><strong>Email:</strong> ${email}</p>
-    <p><strong>Phone:</strong> ${phone}</p>
-    <h2 style="color:#023e8a; margin-top:30px;">${jobTitle}</h2>
+  resumePreview.innerHTML = "<p><em>Generating your resume with AI...</em></p>";
+  downloadBtn.style.display = "none";
 
-    <h3 style="color:#0077b6; margin-top:30px;">Education</h3>
-    <p>${education.replace(/\n/g, "<br>")}</p>
-
-    <h3 style="color:#0077b6; margin-top:30px;">Qualifications & Skills</h3>
-    <p>${qualifications.replace(/\n/g, "<br>")}</p>
-
-    <h3 style="color:#0077b6; margin-top:30px;">Work Experience</h3>
-    <p>${experience.replace(/\n/g, "<br>")}</p>
+  const prompt = `
+Create a professional resume:
+Name: ${fullName}
+Email: ${email}
+Phone: ${phone}
+Job Title: ${jobTitle}
+Education: ${education}
+Qualifications: ${qualifications}
+Work Experience: ${experience}
   `;
 
-  // Show in preview container
-  resumePreview.innerHTML = resumeHTML;
+  try {
+    const aiText = await generateResumeFromAPI(prompt);
 
-  // Show download button
-  downloadBtn.style.display = "block";
+    resumePreview.className = `preview template-${template}`;
+    resumePreview.innerHTML = `
+      <h1>${fullName}</h1>
+      <p><strong>Email:</strong> ${email}</p>
+      <p><strong>Phone:</strong> ${phone}</p>
+      <h2>${jobTitle}</h2>
+      <hr>
+      <div>${aiText.replace(/\n/g, "<br>")}</div>
+    `;
+
+    downloadBtn.style.display = "block";
+  } catch (err) {
+    resumePreview.innerHTML = `<p style="color:red;">Error: ${err.message}</p>`;
+  }
 });
 
-// Download PDF button handler
 downloadBtn.addEventListener("click", () => {
-  const opt = {
-    margin:       0.4,
-    filename:     'Resume.pdf',
-    image:        { type: 'jpeg', quality: 0.98 },
-    html2canvas:  { scale: 2, scrollY: 0 },
-    jsPDF:        { unit: 'in', format: 'letter', orientation: 'portrait' }
-  };
-  html2pdf().set(opt).from(resumePreview).save();
+  html2pdf().from(resumePreview).save("Resume.pdf");
 });
