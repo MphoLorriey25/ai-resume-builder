@@ -1,0 +1,2 @@
+// config.js
+const OPENROUTER_API_KEY = "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";
