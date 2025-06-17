@@ -1,184 +1,23 @@
-/* General styling */
 body {
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  background: #f0f2f5;
-  margin: 0;
-  padding: 20px;
-  color: #333;
+  font-family: Arial, sans-serif;
+  margin: 20px;
 }
 
-h2, h3 {
-  color: #222;
-}
-
-form {
+.container {
   max-width: 600px;
-  margin: 0 auto 20px auto;
-  background: #fff;
-  padding: 20px 25px;
-  border-radius: 8px;
-  box-shadow: 0 2px 8px rgb(0 0 0 / 0.1);
+  margin: 0 auto;
 }
 
-label {
-  display: block;
-  margin: 12px 0 6px 0;
-  font-weight: 600;
-}
-
-input[type="text"],
-input[type="email"],
-textarea,
-select {
+input, textarea {
   width: 100%;
-  padding: 8px 10px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  resize: vertical;
-  font-size: 1rem;
+  margin-bottom: 10px;
+  padding: 8px;
   box-sizing: border-box;
 }
 
-button {
-  margin-top: 20px;
-  background-color: #0078d7;
-  color: white;
-  border: none;
-  padding: 12px 20px;
-  font-size: 1.1rem;
-  border-radius: 6px;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-}
-
-button:hover {
-  background-color: #005ea3;
-}
-
-#templatePreview {
-  margin-top: 15px;
-  margin-bottom: 15px;
-  text-align: center;
-  border: 1px solid #ddd;
-  padding: 10px;
-  border-radius: 6px;
-  background: #fafafa;
-}
-
 #resumeOutput {
-  max-width: 650px;
-  margin: 0 auto 30px auto;
   background: white;
-  padding: 25px 30px;
-  border-radius: 8px;
-  box-shadow: 0 4px 15px rgb(0 0 0 / 0.1);
-  white-space: pre-wrap;
-}
-
-/* Template-specific styles */
-
-/* Classic Template */
-.template-classic h2 {
-  font-family: Georgia, serif;
-  font-size: 2.4rem;
-  border-bottom: 2px solid #0078d7;
-  padding-bottom: 4px;
-  margin-bottom: 15px;
-  color: #003366;
-}
-
-.template-classic h3 {
-  border-bottom: 1px solid #ccc;
-  margin-top: 20px;
-  color: #005a9e;
-}
-
-.template-classic p, 
-.template-classic pre {
-  font-family: 'Times New Roman', Times, serif;
-  font-size: 1rem;
-  line-height: 1.5;
-  color: #333;
-}
-
-/* Modern Template */
-.template-modern h2 {
-  font-family: 'Arial Black', Arial, sans-serif;
-  color: #1a1a1a;
-  font-size: 2.2rem;
-  text-transform: uppercase;
-  letter-spacing: 1.5px;
-  margin-bottom: 10px;
-  border-left: 6px solid #00aaff;
-  padding-left: 12px;
-}
-
-.template-modern h3 {
-  font-family: 'Arial', sans-serif;
-  color: #00aaff;
-  margin-top: 25px;
-  margin-bottom: 8px;
-}
-
-.template-modern p, 
-.template-modern pre {
-  font-family: 'Arial', sans-serif;
-  font-size: 1rem;
-  color: #444;
-  line-height: 1.4;
-}
-
-/* Creative Template */
-.template-creative {
-  font-family: 'Comic Sans MS', cursive, sans-serif;
-  color: #222;
-  background: #fffbf0;
-  border: 2px dashed #ff9933;
-  padding: 25px;
-  border-radius: 15px;
-}
-
-.template-creative h2 {
-  font-size: 2.6rem;
-  color: #ff6600;
-  text-align: center;
-  margin-bottom: 20px;
-  text-shadow: 1px 1px 1px #999;
-}
-
-.template-creative h3 {
-  color: #cc5200;
-  border-bottom: 1px dotted #cc5200;
-  padding-bottom: 5px;
-  margin-top: 22px;
-}
-
-.template-creative p, 
-.template-creative pre {
-  font-size: 1.1rem;
-  color: #663300;
-  line-height: 1.5;
-}
-
-/* Saved resumes section */
-#savedResumesList {
-  max-width: 600px;
-  margin: 0 auto 40px auto;
-  background: #fff;
-  padding: 15px 20px;
-  border-radius: 8px;
-  box-shadow: 0 2px 10px rgb(0 0 0 / 0.07);
-  font-size: 0.95rem;
-}
-
-#savedResumesList div {
-  margin-bottom: 15px;
-}
-
-/* Responsive */
-@media (max-width: 700px) {
-  form, #resumeOutput, #savedResumesList {
-    width: 95%;
-    margin: 0 auto 20px auto;
-  }
+  color: black;
+  font-family: Arial, sans-serif;
+  max-width: 100%;
 }
