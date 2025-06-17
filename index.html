@@ -3,43 +3,104 @@
 <head>
   <meta charset="UTF-8" />
   <title>AI Resume Builder</title>
-  <link rel="stylesheet" href="style.css" />
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+    }
+    .container {
+      max-width: 600px;
+      margin: auto;
+    }
+    input, textarea {
+      width: 100%;
+      margin-bottom: 10px;
+      padding: 8px;
+      box-sizing: border-box;
+    }
+    #resumeOutput {
+      background: white;
+      color: black;
+      padding: 15px;
+      border: 1px solid #ccc;
+      margin-top: 20px;
+      min-height: 150px;
+    }
+    button {
+      padding: 10px 15px;
+      font-size: 16px;
+    }
+  </style>
 </head>
 <body>
   <div class="container">
     <h1>AI Resume Builder</h1>
-
     <form id="resumeForm">
-      <label for="fullName">Full Name:</label><br />
+      <label>Full Name:</label><br />
       <input type="text" id="fullName" required /><br />
-
-      <label for="email">Email:</label><br />
+      <label>Email:</label><br />
       <input type="email" id="email" required /><br />
-
-      <label for="phone">Phone:</label><br />
+      <label>Phone:</label><br />
       <input type="tel" id="phone" /><br />
-
-      <label for="jobTitle">Job Title / Career Goal:</label><br />
+      <label>Job Title / Career Goal:</label><br />
       <input type="text" id="jobTitle" /><br />
-
-      <label for="education">Education:</label><br />
+      <label>Education:</label><br />
       <textarea id="education" rows="3"></textarea><br />
-
-      <label for="qualifications">Qualifications & Skills:</label><br />
+      <label>Qualifications & Skills:</label><br />
       <textarea id="qualifications" rows="3"></textarea><br />
-
-      <label for="experience">Work Experience:</label><br />
+      <label>Work Experience:</label><br />
       <textarea id="experience" rows="3"></textarea><br />
-
       <button type="submit">Generate Resume</button>
     </form>
 
-    <div id="resumeOutput" style="margin-top: 20px; border: 1px solid #ccc; padding: 15px;"></div>
-
-    <button id="downloadPDF" style="display:none; margin-top: 10px;">Download as PDF</button>
+    <div id="resumeOutput">Your resume preview will appear here...</div>
+    <button id="downloadPDF" style="display:none; margin-top:15px;">Download as PDF</button>
   </div>
 
-  <script src="script.js"></script>
+  <script>
+    const resumeForm = document.getElementById("resumeForm");
+    const resumeOutput = document.getElementById("resumeOutput");
+    const downloadBtn = document.getElementById("downloadPDF");
+
+    resumeForm.addEventListener("submit", function(e) {
+      e.preventDefault();
+
+      const fullName = document.getElementById("fullName").value.trim();
+      const email = document.getElementById("email").value.trim();
+      const phone = document.getElementById("phone").value.trim();
+      const jobTitle = document.getElementById("jobTitle").value.trim();
+      const education = document.getElementById("education").value.trim();
+      const qualifications = document.getElementById("qualifications").value.trim();
+      const experience = document.getElementById("experience").value.trim();
+
+      resumeOutput.innerHTML = `
+        <h2>${fullName}</h2>
+        <p><strong>Email:</strong> ${email}</p>
+        <p><strong>Phone:</strong> ${phone}</p>
+        <p><strong>Career Goal:</strong> ${jobTitle}</p>
+        <h3>Education</h3>
+        <p>${education.replace(/\n/g, "<br>")}</p>
+        <h3>Qualifications & Skills</h3>
+        <p>${qualifications.replace(/\n/g, "<br>")}</p>
+        <h3>Work Experience</h3>
+        <p>${experience.replace(/\n/g, "<br>")}</p>
+      `;
+
+      downloadBtn.style.display = "inline-block";
+    });
+
+    downloadBtn.addEventListener("click", () => {
+      const opt = {
+        margin:       0.5,
+        filename:     "My_Resume.pdf",
+        image:        { type: 'jpeg', quality: 0.98 },
+        html2canvas:  { scale: 2 },
+        jsPDF:        { unit: 'in', format: 'letter', orientation: 'portrait' }
+      };
+
+      html2pdf().set(opt).from(resumeOutput).save();
+    });
+  </script>
 </body>
 </html>
