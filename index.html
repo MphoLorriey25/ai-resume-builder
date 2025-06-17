@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>AI Resume Builder</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <form id="resumeForm">
+    <h2>📝 Resume Builder</h2>
+
+    <label>Full Name:</label>
+    <input type="text" id="fullName" required />
+
+    <label>Email Address:</label>
+    <input type="email" id="email" required />
+
+    <label>Phone Number:</label>
+    <input type="text" id="phone" required />
+
+    <label>Career Goal / Job Title:</label>
+    <input type="text" id="jobTitle" required />
+
+    <label>Educational Background:</label>
+    <textarea id="education" rows="2"></textarea>
+
+    <label>Qualifications & Skills:</label>
+    <textarea id="qualifications" rows="3"></textarea>
+
+    <label>Work Experience:</label>
+    <textarea id="experience" rows="3"></textarea>
+
+    <label>Select Resume Template:</label>
+    <select id="template">
+      <option value="classic">Classic</option>
+      <option value="modern">Modern</option>
+      <option value="creative">Creative</option>
+    </select>
+
+    <div id="templatePreview">
+      <img id="previewImage" src="templates/classic.png" alt="Template Preview" width="100%">
+    </div>
+
+    <button type="submit">Generate Resume</button>
+  </form>
+
+  <div id="resumeOutput" class="template-classic"></div>
+  <button id="downloadPDF" style="display:none;">📄 Download as PDF</button>
+
+  <h3>📚 Saved Resumes</h3>
+  <div id="savedResumesList"></div>
+
+  <!-- JavaScript Files -->
+  <script src="config.js"></script>
+  <script src="script.js"></script>
+  <script src="https://raw.githack.com/eKoopmans/html2pdf/master/dist/html2pdf.bundle.js"></script>
+</body>
+</html>
