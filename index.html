@@ -2,52 +2,37 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>AI Resume Builder</title>
-  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="style.css" />
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 </head>
 <body>
   <div class="container">
     <h1>AI Resume Builder</h1>
-    <div class="content-wrapper">
-      <!-- Left side form -->
-      <form id="resumeForm" class="form">
-        <label for="fullName">Full Name</label>
-        <input type="text" id="fullName" placeholder="Jane Doe" required />
 
-        <label for="email">Email</label>
-        <input type="email" id="email" placeholder="jane.doe@example.com" required />
+    <form id="resumeForm">
+      <input type="text" id="fullName" placeholder="Full Name" required />
+      <input type="email" id="email" placeholder="Email" required />
+      <input type="tel" id="phone" placeholder="Phone Number" required />
+      <input type="text" id="jobTitle" placeholder="Career Goal / Job Title" required />
+      <textarea id="education" placeholder="Education" required></textarea>
+      <textarea id="qualifications" placeholder="Qualifications & Skills" required></textarea>
+      <textarea id="experience" placeholder="Work Experience" required></textarea>
 
-        <label for="phone">Phone</label>
-        <input type="tel" id="phone" placeholder="+1234567890" required />
+      <label for="template">Choose a Template</label>
+      <select id="template">
+        <option value="classic">Classic</option>
+        <option value="modern">Modern</option>
+      </select>
 
-        <label for="jobTitle">Job Title</label>
-        <input type="text" id="jobTitle" placeholder="Software Engineer" required />
+      <button type="submit">Generate Resume</button>
+    </form>
 
-        <label for="education">Education</label>
-        <textarea id="education" rows="3" placeholder="BSc in Computer Science, University XYZ (2014 - 2018)" required></textarea>
-
-        <label for="qualifications">Qualifications & Skills</label>
-        <textarea id="qualifications" rows="4" placeholder="JavaScript, React, Node.js, Team Leadership" required></textarea>
-
-        <label for="experience">Work Experience</label>
-        <textarea id="experience" rows="4" placeholder="Software Engineer at ABC Corp (2020 - Present)" required></textarea>
-
-        <button type="submit">Generate Resume</button>
-      </form>
-
-      <!-- Right side preview -->
-      <div id="resumePreview" class="preview">
-        <h2>Your Resume Preview Will Appear Here</h2>
-        <p>Fill out the form and click "Generate Resume" to see your resume.</p>
-      </div>
-    </div>
-
-    <button id="downloadBtn" style="display:none;">Download as PDF</button>
+    <div id="resumePreview" class="preview"></div>
+    <button id="downloadBtn" style="display: none;">Download as PDF</button>
   </div>
 
   <script src="script.js"></script>
+  <script src="config.js"></script>
 </body>
 </html>
