@@ -10,49 +10,34 @@
   <div class="container">
     <h1>AI Resume Builder</h1>
 
-    <!-- Resume Form -->
     <form id="resumeForm">
       <label for="fullName">Full Name:</label><br />
-      <input type="text" id="fullName" name="fullName" required /><br />
+      <input type="text" id="fullName" required /><br />
 
       <label for="email">Email:</label><br />
-      <input type="email" id="email" name="email" required /><br />
+      <input type="email" id="email" required /><br />
 
       <label for="phone">Phone:</label><br />
-      <input type="tel" id="phone" name="phone" /><br />
+      <input type="tel" id="phone" /><br />
 
       <label for="jobTitle">Job Title / Career Goal:</label><br />
-      <input type="text" id="jobTitle" name="jobTitle" /><br />
+      <input type="text" id="jobTitle" /><br />
 
       <label for="education">Education:</label><br />
-      <textarea id="education" name="education" rows="3"></textarea><br />
+      <textarea id="education" rows="3"></textarea><br />
 
       <label for="qualifications">Qualifications & Skills:</label><br />
-      <textarea id="qualifications" name="qualifications" rows="3"></textarea><br />
+      <textarea id="qualifications" rows="3"></textarea><br />
 
       <label for="experience">Work Experience:</label><br />
-      <textarea id="experience" name="experience" rows="3"></textarea><br />
-
-      <label for="template">Select Template:</label><br />
-      <select id="template" name="template">
-        <option value="classic">Classic</option>
-        <option value="modern">Modern</option>
-      </select><br />
-
-      <img id="previewImage" src="templates/classic.png" alt="Template Preview" style="width:200px; margin: 10px 0;" />
+      <textarea id="experience" rows="3"></textarea><br />
 
       <button type="submit">Generate Resume</button>
     </form>
 
-    <!-- Resume Output -->
     <div id="resumeOutput" style="margin-top: 20px; border: 1px solid #ccc; padding: 15px;"></div>
 
-    <!-- Download PDF Button -->
     <button id="downloadPDF" style="display:none; margin-top: 10px;">Download as PDF</button>
-
-    <!-- Saved Resumes List -->
-    <h2>Saved Resumes</h2>
-    <div id="savedResumesList"></div>
   </div>
 
   <script src="script.js"></script>
