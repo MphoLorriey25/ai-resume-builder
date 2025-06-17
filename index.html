@@ -1,33 +1,58 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
   <title>AI Resume Builder</title>
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="style.css" />
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 </head>
 <body>
   <div class="container">
     <h1>AI Resume Builder</h1>
 
-    <!-- Resume Content -->
-    <div id="resume-content">
-      <h2>Jane Doe</h2>
-      <p>Email: jane.doe@example.com</p>
-      <p>Phone: +1234567890</p>
-      <h3>Experience</h3>
-      <ul>
-        <li>Software Engineer at XYZ Corp (2020 - Present)</li>
-        <li>Junior Developer at ABC Ltd (2018 - 2020)</li>
-      </ul>
-      <h3>Education</h3>
-      <ul>
-        <li>BSc in Computer Science, University of Tech (2014 - 2018)</li>
-      </ul>
-    </div>
+    <!-- Resume Form -->
+    <form id="resumeForm">
+      <label for="fullName">Full Name:</label><br />
+      <input type="text" id="fullName" name="fullName" required /><br />
 
-    <!-- Buttons -->
-    <button id="downloadBtn">Download as PDF</button>
+      <label for="email">Email:</label><br />
+      <input type="email" id="email" name="email" required /><br />
+
+      <label for="phone">Phone:</label><br />
+      <input type="tel" id="phone" name="phone" /><br />
+
+      <label for="jobTitle">Job Title / Career Goal:</label><br />
+      <input type="text" id="jobTitle" name="jobTitle" /><br />
+
+      <label for="education">Education:</label><br />
+      <textarea id="education" name="education" rows="3"></textarea><br />
+
+      <label for="qualifications">Qualifications & Skills:</label><br />
+      <textarea id="qualifications" name="qualifications" rows="3"></textarea><br />
+
+      <label for="experience">Work Experience:</label><br />
+      <textarea id="experience" name="experience" rows="3"></textarea><br />
+
+      <label for="template">Select Template:</label><br />
+      <select id="template" name="template">
+        <option value="classic">Classic</option>
+        <option value="modern">Modern</option>
+      </select><br />
+
+      <img id="previewImage" src="templates/classic.png" alt="Template Preview" style="width:200px; margin: 10px 0;" />
+
+      <button type="submit">Generate Resume</button>
+    </form>
+
+    <!-- Resume Output -->
+    <div id="resumeOutput" style="margin-top: 20px; border: 1px solid #ccc; padding: 15px;"></div>
+
+    <!-- Download PDF Button -->
+    <button id="downloadPDF" style="display:none; margin-top: 10px;">Download as PDF</button>
+
+    <!-- Saved Resumes List -->
+    <h2>Saved Resumes</h2>
+    <div id="savedResumesList"></div>
   </div>
 
   <script src="script.js"></script>
