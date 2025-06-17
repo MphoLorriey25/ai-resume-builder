@@ -3,206 +3,51 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Beautiful AI Resume Builder</title>
-
-  <!-- Google Fonts -->
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;600&display=swap" rel="stylesheet" />
-
-  <!-- html2pdf lib -->
+  <title>AI Resume Builder</title>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
-
-  <style>
-    /* Reset & base */
-    * {
-      box-sizing: border-box;
-    }
-    body {
-      margin: 0;
-      font-family: 'Poppins', sans-serif;
-      background: #f5f7fa;
-      color: #333;
-      line-height: 1.6;
-    }
-    .container {
-      max-width: 900px;
-      margin: 40px auto;
-      background: white;
-      border-radius: 12px;
-      box-shadow: 0 12px 25px rgba(0,0,0,0.1);
-      overflow: hidden;
-    }
-    header {
-      position: relative;
-      height: 220px;
-      background: url('https://images.unsplash.com/photo-1504384308090-c894fdcc538d?auto=format&fit=crop&w=1200&q=80') no-repeat center center/cover;
-      border-top-left-radius: 12px;
-      border-top-right-radius: 12px;
-      color: white;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      font-size: 2.4rem;
-      font-weight: 600;
-      text-shadow: 0 2px 6px rgba(0,0,0,0.6);
-    }
-    main {
-      padding: 30px 40px;
-      display: flex;
-      gap: 40px;
-      flex-wrap: wrap;
-      justify-content: space-between;
-    }
-    form {
-      flex: 1 1 350px;
-      display: flex;
-      flex-direction: column;
-      gap: 15px;
-    }
-    form label {
-      font-weight: 600;
-    }
-    form input, form textarea {
-      padding: 10px 12px;
-      border: 1.8px solid #ccc;
-      border-radius: 6px;
-      font-size: 1rem;
-      transition: border-color 0.3s ease;
-      resize: vertical;
-    }
-    form input:focus, form textarea:focus {
-      outline: none;
-      border-color: #4a90e2;
-      box-shadow: 0 0 5px #4a90e2aa;
-    }
-    button {
-      padding: 12px;
-      font-size: 1.1rem;
-      border: none;
-      border-radius: 8px;
-      background: #4a90e2;
-      color: white;
-      font-weight: 700;
-      cursor: pointer;
-      transition: background-color 0.3s ease;
-      margin-top: 10px;
-    }
-    button:hover {
-      background: #357ABD;
-    }
-    #resumePreview {
-      flex: 1 1 450px;
-      background: #f0f4f8;
-      padding: 25px 30px;
-      border-radius: 10px;
-      box-shadow: inset 0 0 10px #d7dfe8;
-      min-height: 480px;
-      overflow-y: auto;
-    }
-    #resumePreview h2 {
-      margin-top: 0;
-      border-bottom: 2px solid #4a90e2;
-      padding-bottom: 6px;
-      font-weight: 700;
-      color: #234E70;
-    }
-    #resumePreview h3 {
-      margin-bottom: 6px;
-      color: #4a90e2;
-      font-weight: 600;
-    }
-    #downloadPDF {
-      display: none;
-      width: 100%;
-      margin-top: 20px;
-      background: #34A853;
-      font-weight: 700;
-    }
-  </style>
 </head>
 <body>
-
   <div class="container">
-    <header>
-      AI Resume Builder
-    </header>
-    <main>
-      <form id="resumeForm" autocomplete="off">
-        <label for="fullName">Full Name *</label>
-        <input type="text" id="fullName" required placeholder="John Doe" />
+    <h1>AI Resume Builder</h1>
+    <div class="content-wrapper">
+      <!-- Left side form -->
+      <form id="resumeForm" class="form">
+        <label for="fullName">Full Name</label>
+        <input type="text" id="fullName" placeholder="Jane Doe" required />
 
-        <label for="email">Email *</label>
-        <input type="email" id="email" required placeholder="john@example.com" />
+        <label for="email">Email</label>
+        <input type="email" id="email" placeholder="jane.doe@example.com" required />
 
         <label for="phone">Phone</label>
-        <input type="tel" id="phone" placeholder="+1 234 567 890" />
+        <input type="tel" id="phone" placeholder="+1234567890" required />
 
-        <label for="jobTitle">Job Title / Career Goal</label>
-        <input type="text" id="jobTitle" placeholder="Software Engineer" />
+        <label for="jobTitle">Job Title</label>
+        <input type="text" id="jobTitle" placeholder="Software Engineer" required />
 
         <label for="education">Education</label>
-        <textarea id="education" rows="3" placeholder="BSc Computer Science, University X"></textarea>
+        <textarea id="education" rows="3" placeholder="BSc in Computer Science, University XYZ (2014 - 2018)" required></textarea>
 
         <label for="qualifications">Qualifications & Skills</label>
-        <textarea id="qualifications" rows="4" placeholder="Programming, Teamwork, Agile"></textarea>
+        <textarea id="qualifications" rows="4" placeholder="JavaScript, React, Node.js, Team Leadership" required></textarea>
 
         <label for="experience">Work Experience</label>
-        <textarea id="experience" rows="4" placeholder="Software Engineer at Company Y (2019 - Present)"></textarea>
+        <textarea id="experience" rows="4" placeholder="Software Engineer at ABC Corp (2020 - Present)" required></textarea>
 
         <button type="submit">Generate Resume</button>
       </form>
 
-      <div id="resumePreview">
-        <p>Fill the form and click “Generate Resume” to see your preview here.</p>
+      <!-- Right side preview -->
+      <div id="resumePreview" class="preview">
+        <h2>Your Resume Preview Will Appear Here</h2>
+        <p>Fill out the form and click "Generate Resume" to see your resume.</p>
       </div>
-    </main>
-    <button id="downloadPDF">Download Resume as PDF</button>
+    </div>
+
+    <button id="downloadBtn" style="display:none;">Download as PDF</button>
   </div>
 
-  <script>
-    const form = document.getElementById('resumeForm');
-    const preview = document.getElementById('resumePreview');
-    const downloadBtn = document.getElementById('downloadPDF');
-
-    form.addEventListener('submit', e => {
-      e.preventDefault();
-
-      const fullName = document.getElementById('fullName').value.trim();
-      const email = document.getElementById('email').value.trim();
-      const phone = document.getElementById('phone').value.trim();
-      const jobTitle = document.getElementById('jobTitle').value.trim();
-      const education = document.getElementById('education').value.trim();
-      const qualifications = document.getElementById('qualifications').value.trim();
-      const experience = document.getElementById('experience').value.trim();
-
-      if (!fullName || !email) {
-        alert("Please fill in the required fields: Full Name and Email.");
-        return;
-      }
-
-      preview.innerHTML = `
-        <h2>${fullName}</h2>
-        <p><strong>Email:</strong> ${email}</p>
-        ${phone ? `<p><strong>Phone:</strong> ${phone}</p>` : ''}
-        ${jobTitle ? `<p><strong>Career Goal:</strong> ${jobTitle}</p>` : ''}
-        ${education ? `<h3>Education</h3><p>${education.replace(/\n/g, '<br>')}</p>` : ''}
-        ${qualifications ? `<h3>Qualifications & Skills</h3><p>${qualifications.replace(/\n/g, '<br>')}</p>` : ''}
-        ${experience ? `<h3>Work Experience</h3><p>${experience.replace(/\n/g, '<br>')}</p>` : ''}
-      `;
-
-      downloadBtn.style.display = 'block';
-    });
-
-    downloadBtn.addEventListener('click', () => {
-      const opt = {
-        margin:       0.4,
-        filename:     'Resume.pdf',
-        image:        { type: 'jpeg', quality: 0.98 },
-        html2canvas:  { scale: 2 },
-        jsPDF:        { unit: 'in', format: 'letter', orientation: 'portrait' }
-      };
-      html2pdf().set(opt).from(preview).save();
-    });
-  </script>
-
+  <script src="script.js"></script>
 </body>
 </html>
